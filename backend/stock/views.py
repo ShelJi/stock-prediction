@@ -1,3 +1,4 @@
-from django.shortcuts import render
+from rest_framework import response
 
-# Create your views here.
+def home(request):
+    return response.Response({"message": "Welcome to the Stock Prediction API!"})

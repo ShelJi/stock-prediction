@@ -1,21 +1,32 @@
+import environ
+import os
 from pathlib import Path
 
+
+env = environ.Env(
+    DEBUG=(bool, False)
+)
+
 BASE_DIR = Path(__file__).resolve().parent.parent
+environ.Env.read_env(os.path.join(BASE_DIR, '.env'))
 
-SECRET_KEY = 'django-insecure-ke_u)7e+db4olv2z8cr8geoe3c7*#ricjvc8r3m7!db0cz1t&q'
+SECRET_KEY = env('SECRET_KEY')
 
-DEBUG = True
+DEBUG = env('DEBUG')
 
 ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
+    'jazzmin',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'restframework',
+    'rest_framework',
+    'accounts',
+    'stock',
 ]
 
 MIDDLEWARE = [
@@ -47,12 +58,20 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'main.wsgi.application'
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
+
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
+    'default': env.db(),
+    # 'extra': env.db_url(
+    #     'SQLITE_URL',
+    #     default='sqlite:////tmp/my-tmp-sqlite.db'
+    # )
+} 
 
 AUTH_PASSWORD_VALIDATORS = [
     {
